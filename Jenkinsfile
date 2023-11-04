@@ -27,7 +27,9 @@ spec:
          stage('Build Docker image') {
             steps {
                 container('docker') {
-					sh 'docker build -t kimhj4270/godummyweb:latest'
+					sh 'docker image ls'
+					sh 'docker build -t kimhj4270/godummyweb:latest .'
+					sh 'docker image ls'
                 }
             }
         }
