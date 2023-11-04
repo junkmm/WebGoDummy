@@ -37,10 +37,8 @@ spec:
                 IMAGE       = 'godummyweb'
             }
             steps {
-				container(name: 'kaniko', shell: '/busybox/sh') {
-                    sh '''#!/busybox/sh
-                    /kaniko/executor -f `pwd`/Dockerfile.run -c `pwd` --cache=true --destination=${REPOSITORY}/${IMAGE}
-                    '''
+				container('kaniko') {
+					sh "executor --dockerfile=Dockerfile --context=./ --destination=${REPOSITORY}/${IMAGE}:latest"
 				}
 			}
 		}
