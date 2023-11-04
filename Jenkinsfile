@@ -1,36 +1,46 @@
 pipeline {
     agent {
         kubernetes {
-            defaultContainer 'jnlp'
+            label 'kaniko'
             yaml """
+kind: Pod
+metadata:
+  name: kaniko
 spec:
-  dnsPolicy: Default
   containers:
-    - name: docker
-      image: docker:latest
-      command:
-        - cat
-      tty: true
-      privileged: true
-      volumeMounts:
-        - name: dockersock
-          mountPath: /var/run/docker.sock
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    imagePullPolicy: Always
+    command:
+    - /busybox/cat
+    tty: true
+    volumeMounts:
+      - name: jenkins-docker-cfg
+        mountPath: /kaniko/.docker
   volumes:
-    - name: dockersock
-      hostPath:
-        path: /var/run/docker.sock
-            """
+  - name: jenkins-docker-cfg
+    projected:
+      sources:
+      - secret:
+          name: registry-credentials
+          items:
+            - key: .dockerconfigjson
+              path: config.json
+"""
         }
     }
 
     stages {
          stage('Build Docker image') {
+            environment {
+                REPOSITORY  = 'kimhj4270'
+                IMAGE       = 'godummyweb'
+            }
             steps {
-                container('docker') {
-					sh 'docker image ls'
-					sh 'docker build -t kimhj4270/godummyweb:latest .'
-					sh 'docker image ls'
-                }
+				container(name: 'kaniko', shell: '/busybox/sh') {
+                    sh '''#!/busybox/sh
+                    /kaniko/executor -f `pwd`/Dockerfile.run -c `pwd` --cache=true --destination=${REPOSITORY}/${IMAGE}
+                    '''
             }
         }
     }
