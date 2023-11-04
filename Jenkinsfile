@@ -40,7 +40,8 @@ spec:
 				container('kaniko') {
 					script {
 						def commitHash = sh(script: 'git rev-parse HEAD', returnStatus: true).trim()
-						sh "executor --dockerfile=Dockerfile --context=./ --destination=${REPOSITORY}/${IMAGE}:latest --destination=${REPOSITORY}/${IMAGE}:${commitHash}"
+						def imageTag = commitHash
+						sh "executor --dockerfile=Dockerfile --context=./ --destination=${REPOSITORY}/${IMAGE}:latest --destination=${REPOSITORY}/${IMAGE}:${imageTag}"
 					}
 				}
 			}
