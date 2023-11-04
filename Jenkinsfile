@@ -41,7 +41,8 @@ spec:
                     sh '''#!/busybox/sh
                     /kaniko/executor -f `pwd`/Dockerfile.run -c `pwd` --cache=true --destination=${REPOSITORY}/${IMAGE}
                     '''
-            }
-        }
-    }
+				}
+			}
+		}
+	}
 }
