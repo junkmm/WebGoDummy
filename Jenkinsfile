@@ -12,16 +12,22 @@ spec:
         - cat
       tty: true
       privileged: true
+      volumeMounts:
+        - name: dockersock
+          mountPath: /var/run/docker.sock
+  volumes:
+    - name: dockersock
+      hostPath:
+        path: /var/run/docker.sock
             """
         }
     }
 
     stages {
-         stage('My test') {
+         stage('Build Docker image') {
             steps {
                 container('docker') {
-                    sh "echo hello world"
-                    sh "docker ps"
+					sh "ls -al"
                 }
             }
         }
