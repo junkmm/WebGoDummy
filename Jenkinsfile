@@ -39,7 +39,9 @@ spec:
             steps {
 				container('kaniko') {
 					script {
-						sh "executor --dockerfile=Dockerfile --context=./ --destination=${REPOSITORY}/${IMAGE}:latest --destination=${REPOSITORY}/${IMAGE}:${GIT_COMMIT}"
+						def fullCommitHash = env.GIT_COMMIT
+						def shortCommitHash = fullCommitHash.take(7)
+						sh "executor --dockerfile=Dockerfile --context=./ --destination=${REPOSITORY}/${IMAGE}:${shortCommitHash}"
 					}
 				}
 			}
