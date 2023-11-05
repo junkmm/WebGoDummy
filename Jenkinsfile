@@ -48,32 +48,32 @@ spec:
                 IMAGE       = 'godummyweb'
             }
             steps {
-				container('kaniko') {
-					script {
-						def fullCommitHash = env.GIT_COMMIT
-						def shortCommitHash = fullCommitHash.take(7)
-						sh "executor --dockerfile=Dockerfile --context=./ --destination=${REPOSITORY}/${IMAGE}:${shortCommitHash}"
-						env.SHORT_COMMIT_HASH = shortCommitHash
-					}
-				}
-			}
-		}
+				      container('kaniko') {
+			      		script {
+			      			def fullCommitHash = env.GIT_COMMIT
+			      			def shortCommitHash = fullCommitHash.take(7)
+			      			sh "executor --dockerfile=Dockerfile --context=./ --destination=${REPOSITORY}/${IMAGE}:${shortCommitHash}"
+			      			env.SHORT_COMMIT_HASH = shortCommitHash
+			      		}
+			      	}
+		      	}
+		      }
 		stage('GitOps') {
-			container('gitops'){
-				environment{
+      	environment{
 					SHORT_COMMIT_HASH = env.SHORT_COMMIT_HASH
 				}
-				steps{
-					sh """
-						git clone https://github.com/junkmm/GitopsDummy.git ./src
-						cd ./src
-						sed -i 's@kimhj4270/godummyweb:.*@kimhj4270/godummyweb:${SHORT_COMMIT_HASH}@g' deploy.yaml
-						git add deploy.yaml
-						git commit -m "Update container image ${SHORT_COMMIT_HASH}"
-						git push origin main
-					"""
-				}
-			}
-		}
+        steps{
+          container('gitops'){
+              sh """
+                git clone https://github.com/junkmm/GitopsDummy.git ./src
+                cd ./src
+                sed -i 's@kimhj4270/godummyweb:.*@kimhj4270/godummyweb:${SHORT_COMMIT_HASH}@g' deploy.yaml
+                git add deploy.yaml
+                git commit -m "Update container image ${SHORT_COMMIT_HASH}"
+                git push origin main
+              """
+          }
+			  }
+		  }
 	}
 }
