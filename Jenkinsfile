@@ -61,6 +61,7 @@ spec:
                             git config --global --add safe.directory /home/jenkins/agent/workspace/demo2
                             git config --global user.email 'jenkins@jenkins.com'
                             git config --global user.name 'jenkins'
+                            sed -i 's@kimhj4270/godummyweb:.*@kimhj4270/godummyweb:${GIT_COMMIT}@g' deploy.yaml
                             git add deploy.yaml
                             git commit -m 'Update: Image ${GIT_COMMIT}'
                             git remote set-url origin https://${username}:${password}@github.com/junkmm/GitopsDummy.git
