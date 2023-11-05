@@ -1,7 +1,12 @@
+// Kaniko에서 이미지 빌드 후 레지스트리에 Push하기 위해 권한이 필요하며, 아래 Secret을 생성 해주어야 한다.
+// kubectl create secret -n {namespace} docker-registry registry-credentials \  
+//    --docker-username=<username>  \
+//    --docker-password=<password> \
+//    --docker-email=<email-address>
+
 pipeline {
     agent {
         kubernetes {
-            label 'kaniko'
             yaml """
 kind: Pod
 metadata:
@@ -44,6 +49,18 @@ spec:
 						sh "executor --dockerfile=Dockerfile --context=./ --destination=${REPOSITORY}/${IMAGE}:${shortCommitHash}"
 					}
 				}
+			}
+		}
+		stage('GitOps') {
+			container('gitops'){
+				sh """
+					git clone https://github.com/junkmm/GitopsDummy.git ./src
+					cd ./src
+					sed -E -i 's/(image: kimhj4270\/<godummyweb:)[^ ]+/\1${shortCommitHash}/g' deploy.yaml
+					git add deploy.yaml
+					git commit -m "Update container image ${shortCommitHash}"
+					git push origin main
+				"""
 			}
 		}
 	}
