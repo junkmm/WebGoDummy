@@ -52,20 +52,22 @@ spec:
 
         stage('GitOps') {
             steps {
-              withCredentials{[usernamePassword(credentialsId:'git_cre',passwordVariable:'password',usernameVariable:'username')]
-                container('gitops') {
-                  git credentialsId: 'git_cre', url: 'https://github.com/junkmm/GitopsDummy.git', branch: 'main'
-                  sh """
-                  git init
-                  git add deploy.yaml
-                  git config --global user.email 'jenkins@jenkins.com'
-                  git config --global user.name 'jenkins'
-                  git commit -m 'Update: Image ${GIT_COMMIT}'
-                  git remote set-url origin https://${username}:${password}@github.com/junkmm/GitopsDummy.git
-                  git push origin main
-                  """
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'git_cre', passwordVariable: 'password', usernameVariable: 'username')]) {
+                        container('gitops') {
+                            git credentialsId: 'git_cre', url: 'https://github.com/junkmm/GitopsDummy.git', branch: 'main'
+                            sh """
+                            git init
+                            git add deploy.yaml
+                            git config --global user.email 'jenkins@jenkins.com'
+                            git config --global user.name 'jenkins'
+                            git commit -m 'Update: Image ${GIT_COMMIT}'
+                            git remote set-url origin https://${username}:${password}@github.com/junkmm/GitopsDummy.git
+                            git push origin main
+                            """
+                        }
+                    }
                 }
-              }
             }
         }
     }
