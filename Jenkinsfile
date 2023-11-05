@@ -54,6 +54,8 @@ spec:
             steps {
                 container('gitops') {
                   sh "ls -al"
+                  git credentialsId: 'git_cre', url: 'https://github.com/junkmm/GitopsDummy.git', branch: 'main'
+                  sh "ls -al"
                 }
             }
         }
