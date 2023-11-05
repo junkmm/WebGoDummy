@@ -52,8 +52,8 @@ spec:
 
         stage('GitOps') {
             steps {
+                git credentialsID: git_cre, url: 'https://github.com/junkmm/GitopsDummy.git', branch: 'main'
                 container('gitops') {
-                  git credentialsID: git_cre, url: 'https://github.com/junkmm/GitopsDummy.git', branch: 'main'
                   sh """
                   git clone https://github.com/junkmm/GitopsDummy.git ./src
                   cd ./src
