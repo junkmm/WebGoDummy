@@ -22,6 +22,12 @@ spec:
     volumeMounts:
       - name: jenkins-docker-cfg
         mountPath: /kaniko/.docker
+  - name: gitops
+    image: bitnami/git:latest
+    imagePullPolicy: Always
+    command:
+    - /bin/sh
+    tty: true
   volumes:
   - name: jenkins-docker-cfg
     projected:
