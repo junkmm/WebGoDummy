@@ -53,14 +53,16 @@ spec:
 		}
 		stage('GitOps') {
 			container('gitops'){
-				sh """
-					git clone https://github.com/junkmm/GitopsDummy.git ./src
-					cd ./src
-					sed -i 's@kimhj4270/godummyweb:.*@kimhj4270/godummyweb:${shortCommitHash}@g' deploy.yaml
-					git add deploy.yaml
-					git commit -m "Update container image ${shortCommitHash}"
-					git push origin main
-				"""
+				steps{
+					sh """
+						git clone https://github.com/junkmm/GitopsDummy.git ./src
+						cd ./src
+						sed -i 's@kimhj4270/godummyweb:.*@kimhj4270/godummyweb:${shortCommitHash}@g' deploy.yaml
+						git add deploy.yaml
+						git commit -m "Update container image ${shortCommitHash}"
+						git push origin main
+					"""
+				}
 			}
 		}
 	}
