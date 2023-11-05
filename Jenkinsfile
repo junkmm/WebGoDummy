@@ -51,6 +51,7 @@ spec:
         }
         stage('Approval'){
           steps{
+            slackSend(color: '#FF0000', message: "Please Check Deployment Approval (${env.BUILD_URL})")
             timeout(time: 15, unit:"MINUTES"){
               input message: 'Do you want to approve the deployment?', ok:'YES'
             }
