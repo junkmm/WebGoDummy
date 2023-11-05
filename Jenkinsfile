@@ -56,7 +56,7 @@ spec:
 				sh """
 					git clone https://github.com/junkmm/GitopsDummy.git ./src
 					cd ./src
-					sed -E -i 's/(image: kimhj4270\/<godummyweb:)[^ ]+/\1${shortCommitHash}/g' deploy.yaml
+					sed -i 's@kimhj4270/godummyweb:.*@kimhj4270/godummyweb:${shortCommitHash}@g' deploy.yaml
 					git add deploy.yaml
 					git commit -m "Update container image ${shortCommitHash}"
 					git push origin main
