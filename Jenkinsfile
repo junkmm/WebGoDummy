@@ -57,6 +57,8 @@ spec:
                     git clone https://github.com/junkmm/GitopsDummy.git ./src
                     cd ./src
                     sed -i 's@kimhj4270/godummyweb:.*@kimhj4270/godummyweb:${GIT_COMMIT}@g' deploy.yaml
+                    git config --global user.email "dkfkeldy@icloud.com"
+                    git config --global user.name "junkmm"
                     git add deploy.yaml
                     git commit -m "Update container image ${GIT_COMMIT}"
                     git push origin main
