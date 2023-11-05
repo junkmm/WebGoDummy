@@ -44,27 +44,21 @@ spec:
             steps {
                 container('kaniko') {
                     script {
-                        def fullCommitHash = env.GIT_COMMIT
-                        def shortCommitHash = fullCommitHash.take(7)
-                        sh "executor --dockerfile=Dockerfile --context=./ --destination=${REPOSITORY}/${IMAGE}:${shortCommitHash}"
-                        env.SHORT_COMMIT_HASH = shortCommitHash
+                        sh "executor --dockerfile=Dockerfile --context=./ --destination=${REPOSITORY}/${IMAGE}:${GIT_COMMIT}"
                     }
                 }
             }
         }
 
         stage('GitOps') {
-            environment {
-                SHORT_COMMIT_HASH = env.SHORT_COMMIT_HASH
-            }
             steps {
                 container('gitops') {
                     sh """
                     git clone https://github.com/junkmm/GitopsDummy.git ./src
                     cd ./src
-                    sed -i 's@kimhj4270/godummyweb:.*@kimhj4270/godummyweb:${SHORT_COMMIT_HASH}@g' deploy.yaml
+                    sed -i 's@kimhj4270/godummyweb:.*@kimhj4270/godummyweb:${GIT_COMMIT}@g' deploy.yaml
                     git add deploy.yaml
-                    git commit -m "Update container image ${SHORT_COMMIT_HASH}"
+                    git commit -m "Update container image ${GIT_COMMIT}"
                     git push origin main
                     """
                 }
