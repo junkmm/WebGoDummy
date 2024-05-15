@@ -57,8 +57,8 @@ jobs:
 
       - name: Commit and push generated template
         run: |
-          export COMMIT_MESSAGE="Generated template from ${{ github.repository }}/${{ github.ref}}@${{ github.sha }}"
-          sed -i 's@kimhj4270/app1:.*@kimhj4270/app1:${{ steps.commit.outputs.short }}@g' deploy.yaml
+          export COMMIT_MESSAGE="Generated template from ${{ docker.steps.commit.outputs.short }}"
+          sed -i 's@kimhj4270/app1:.*@kimhj4270/app1:${{ docker.steps.commit.outputs.short }}@g' deploy.yaml
           git add .
           git commit -m "$COMMIT_MESSAGE"
           git push
