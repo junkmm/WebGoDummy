@@ -34,3 +34,31 @@ jobs:
           context: .
           push: true
           tags: kimhj4270/app1:${{ steps.commit.outputs.short }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: 'junkmm/GitopsDummy'
+          ref: 'main'
+          token:  ${{ secrets.MY_REPO_TOKEN }}
+
+      - name: Setup git config
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "junkmm@github.actions"
+
+      #- name: Download generated template
+      #  uses: actions/download-artifact@v4
+      #  with:
+      #    name: template-output
+
+      - name: Commit and push generated template
+        run: |
+          export COMMIT_MESSAGE="Generated template from ${{ github.repository }}/${{ github.ref}}@${{ github.sha }}"
+          sed -i 's@kimhj4270/app1:.*@kimhj4270/app1:${{ steps.commit.outputs.short }}@g' deploy.yaml
+          git add .
+          git commit -m "$COMMIT_MESSAGE"
+          git push
