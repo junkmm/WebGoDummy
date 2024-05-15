@@ -35,7 +35,10 @@ jobs:
           push: true
           tags: kimhj4270/app1:${{ steps.commit.outputs.short }}
 
-  deploy:
+    outputs:
+      commit_hash: ${{ steps.commit.outputs.short }}
+
+  delivery:
     runs-on: ubuntu-latest
     needs: docker
     steps:
@@ -57,8 +60,8 @@ jobs:
 
       - name: Commit and push generated template
         run: |
-          export COMMIT_MESSAGE="Generated template from ${{ steps.commit.outputs.short }}"
-          sed -i 's@kimhj4270/app1:.*@kimhj4270/app1:${{ steps.commit.outputs.short }}@g' deploy.yaml
+          export COMMIT_MESSAGE="Generated template from ${{ needs.docker.outputs.commit_hash }}"
+          sed -i 's@kimhj4270/app1:.*@kimhj4270/app1:${{ needs.docker.outputs.commit_hash }}@g' deploy.yaml
           git add .
           git commit -m "$COMMIT_MESSAGE"
           git push
