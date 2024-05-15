@@ -15,9 +15,6 @@ jobs:
       - 
         id: commit
         uses: prompt/actions-commit-hash@v3
-        with:
-          commit: "${{ github.event.workflow_run.head_sha }}"
-          prefix: "sha-"
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
