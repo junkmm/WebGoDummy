@@ -35,11 +35,9 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.NCR_URL }}/app1:${{ steps.commit.outputs.short }}
-
       - 
         name: deployment
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        uses: tale/kubectl-action@v1
         with:
-          args: get pods
+          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+      - run: kubectl get pods
