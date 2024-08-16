@@ -62,8 +62,8 @@ jobs:
           echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile
           
           # Update Kubeconfig
-          ncp-iam-authenticator create-kubeconfig --region KR --clusterUuid 690e4dac-6bcb-4221-9572-16376e5d68c9
-          echo ~/.kube/config
+          ncp-iam-authenticator update-kubeconfig --region KR --clusterUuid 690e4dac-6bcb-4221-9572-16376e5d68c9
+          cat ~/.kube/config
 
           # Update Kubernetes Deployment image
           kubectl set image deployment/go-deployment go=${{ secrets.NCR_URL }}/app1:${{ steps.commit.outputs.short }}
