@@ -38,8 +38,8 @@ jobs:
 
       - name: Deployment
         env:
-          NCLOUD_ACCESS_KEY: ${{ secrets.NCP_ACCESS_KEY }}
-          NCLOUD_SECRET_KEY: ${{ secrets.NCP_SECRET }}
+          NCLOUD_ACCESS_KEY: ${{ secrets.NCR_ID }}
+          NCLOUD_SECRET_KEY: ${{ secrets.NCR_TOKEN }}
           NCLOUD_API_GW: https://ncloud.apigw.ntruss.com
         run: |
           echo $NCLOUD_ACCESS_KEY
