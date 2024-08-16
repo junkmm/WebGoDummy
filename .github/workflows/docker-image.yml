@@ -37,7 +37,6 @@ jobs:
           tags: ${{ secrets.NCR_URL }}/app1:${{ steps.commit.outputs.short }}
       - 
         name: deployment
-        uses: tale/kubectl-action@v1
-        with:
-          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
-      - run: kubectl set image deployment/go-deployment go=${{ secrets.NCR_URL }}/app1:${{ steps.commit.outputs.short }}
+        shell: bash
+        run: |
+        echo "hi"
