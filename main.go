@@ -7,7 +7,7 @@ import (
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, Junkmm!-v1-0-6")
+	fmt.Fprintf(w, "Hello, Junkmm!-v1-0-7")
 }
 
 func main() {
