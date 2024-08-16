@@ -36,7 +36,6 @@ jobs:
           push: true
           tags: ${{ secrets.NCR_URL }}/app1:${{ steps.commit.outputs.short }}
       - 
-        name: deployment
-        shell: bash
+        name: Deployment
         run: |
-        echo "hi"
+          echo "hi"
