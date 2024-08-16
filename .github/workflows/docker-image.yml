@@ -42,6 +42,9 @@ jobs:
           NCLOUD_SECRET_KEY: ${{ secrets.NCP_SECRET }}
           NCLOUD_API_GW: https://ncloud.apigw.ntruss.com
         run: |
+          echo $NCLOUD_ACCESS_KEY
+          echo $NCLOUD_SECRET_KEY
+          echo $NCLOUD_API_GW
           # Download kubectl
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           chmod +x kubectl
