@@ -63,6 +63,7 @@ jobs:
           
           # Update Kubeconfig
           ncp-iam-authenticator create-kubeconfig --region KR --clusterUuid 690e4dac-6bcb-4221-9572-16376e5d68c9
+          echo ~/.kube/config
 
           # Update Kubernetes Deployment image
           kubectl set image deployment/go-deployment go=${{ secrets.NCR_URL }}/app1:${{ steps.commit.outputs.short }}
