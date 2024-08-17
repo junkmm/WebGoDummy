@@ -35,37 +35,9 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.NCR_URL }}/app1:${{ steps.commit.outputs.short }}
-
-      - name: Deployment
-        env:
-          NCLOUD_ACCESS_KEY: ${{ secrets.NCR_ID }}
-          NCLOUD_SECRET_KEY: ${{ secrets.NCR_TOKEN }}
-          NCLOUD_API_GW: https://ncloud.apigw.ntruss.com
-        run: |
-          echo $NCLOUD_ACCESS_KEY
-          echo $NCLOUD_SECRET_KEY
-          echo $NCLOUD_API_GW
-          # Download kubectl
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          mkdir -p ~/.local/bin
-          mv ./kubectl ~/.local/bin/kubectl
-
-          # Download and configure NCP IAM Authenticator
-          curl -o ncp-iam-authenticator -L https://github.com/NaverCloudPlatform/ncp-iam-authenticator/releases/latest/download/ncp-iam-authenticator_linux_amd64
-          chmod +x ./ncp-iam-authenticator
-          mkdir -p $HOME/bin
-          cp ./ncp-iam-authenticator $HOME/bin/ncp-iam-authenticator
-
-          # Update PATH
-          export PATH=$PATH:$HOME/bin
-          echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile
-          
-          # Update Kubeconfig
-          ncp-iam-authenticator update-kubeconfig --region KR --clusterUuid 690e4dac-6bcb-4221-9572-16376e5d68c9
-          cat ~/.kube/config
-
-          # Update Kubernetes Deployment image
-          kubectl set image deployment/go-deployment go=${{ secrets.NCR_URL }}/app1:${{ steps.commit.outputs.short }}
-
-
+      - 
+        name: deployment
+        uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+      - run: kubectl set image deployment/go-deployment go=${{ secrets.NCR_URL }}/app1:${{ steps.commit.outputs.short }}
